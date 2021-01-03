@@ -11,8 +11,8 @@ import styled from 'styled-components';
 // 출처 : https://velog.io/@bigbrothershin/React-Router
 
 const LIKE_MOVIE = gql`
-  mutation likeMovie($id: Int!, $isLiked: Boolean) {
-    likeMovie(id: $id, isLiked: $isLiked) @client
+  mutation toggleLikeMovie($id: Int!, $isLiked: Boolean!) {
+    toggleLikeMovie(id: $id, isLiked: $isLiked) @client
   }
 `;
 
@@ -33,7 +33,7 @@ const Poster = styled.div`
 `;
 
 const Movie = ({ id, bg, isLiked }) => {
-  const [likeMovie] = useMutation(LIKE_MOVIE, {
+  const [toggleLikeMovie] = useMutation(LIKE_MOVIE, {
     variables: { id: parseInt(id), isLiked },
   }); // [likeMovie]의 likeMovie는 apollo resolver의 Mutation안에 있는 likeMovie(0번째 인자)를 가리킴
   //   console.log(`Movie.js:Movie:isLiked:${isLiked}`);
@@ -42,7 +42,7 @@ const Movie = ({ id, bg, isLiked }) => {
       <Link to={`/${id}`}>
         <Poster bg={bg} />
       </Link>
-      <button onClick={() => likeMovie({ id, isLiked })}>
+      <button onClick={toggleLikeMovie}>
         {/* {console.log(isLiked)} */}
         {isLiked ? 'Unlike' : 'like'}
       </button>

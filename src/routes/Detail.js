@@ -24,18 +24,20 @@ import styled from 'styled-components';
 const GET_MOVIE = gql`
   query getMovie($id: Int!) {
     movie(id: $id) {
+      id
       title
       medium_cover_image
       language
       rating
       description_intro
+      isLiked @client
     }
     suggestions(id: $id) {
       id
       medium_cover_image
     }
   }
-`;
+`; // 쿼리 요청할때 id까지 받아와야 apollo가 home에 있는 리스트에 있는 아이템과 같은 아이템이라는 것을 인지함
 
 const Container = styled.div`
   height: 100vh;
@@ -85,7 +87,11 @@ const Detail = () => {
   return (
     <Container>
       <Column>
-        <Title>{loading ? 'Loading...' : data.movie.title}</Title>
+        <Title>
+          {loading
+            ? 'Loading...'
+            : `${data.movie.title} ${data.movie.isLiked ? '❤' : '😥'}`}
+        </Title>
         <Subtitle>
           {data?.movie?.language} · {data?.movie?.rating}
         </Subtitle>
