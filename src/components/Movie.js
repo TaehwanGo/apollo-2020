@@ -1,3 +1,5 @@
+import { useMutation } from '@apollo/react-hooks';
+import { gql } from 'apollo-boost';
 import React from 'react';
 import { Link } from 'react-router-dom'; // <Link to="url"> == <a href="url">
 import styled from 'styled-components';
@@ -7,6 +9,12 @@ import styled from 'styled-components';
 // Link component는 HTML5 History API를 사용하여 브라우저의 주소만 바꿀뿐,
 // 페이지를 새로 불러오지는 않음
 // 출처 : https://velog.io/@bigbrothershin/React-Router
+
+const LIKE_MOVIE = gql`
+  mutation likeMovie($id: Int!, $isLiked: Boolean) {
+    likeMovie(id: $id, isLiked: $isLiked) @client
+  }
+`;
 
 const Container = styled.div`
   height: 380px;
@@ -25,12 +33,19 @@ const Poster = styled.div`
 `;
 
 const Movie = ({ id, bg, isLiked }) => {
+  const [likeMovie] = useMutation(LIKE_MOVIE, {
+    variables: { id: parseInt(id), isLiked },
+  }); // [likeMovie]의 likeMovie는 apollo resolver의 Mutation안에 있는 likeMovie(0번째 인자)를 가리킴
+  //   console.log(`Movie.js:Movie:isLiked:${isLiked}`);
   return (
     <Container>
       <Link to={`/${id}`}>
         <Poster bg={bg} />
       </Link>
-      <button>{isLiked ? 'Unlike' : 'like'}</button>
+      <button onClick={() => likeMovie({ id, isLiked })}>
+        {/* {console.log(isLiked)} */}
+        {isLiked ? 'Unlike' : 'like'}
+      </button>
     </Container>
   );
 };

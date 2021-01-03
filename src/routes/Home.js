@@ -86,8 +86,8 @@ const Home = () => {
           <Movie
             key={m.id}
             id={m.id}
-            isLiked={m.isLiked}
             bg={m.medium_cover_image}
+            isLiked={m.isLiked}
           />
         ))}
       </Movies>
