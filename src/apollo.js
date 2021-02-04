@@ -1,7 +1,7 @@
 import ApolloClient from 'apollo-boost';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/',
+  uri: 'http://localhost:4000/', // graphql api 프로젝트에서 만든 서버 주소
   resolvers: {
     Movie: {
       isLiked: () => false,
